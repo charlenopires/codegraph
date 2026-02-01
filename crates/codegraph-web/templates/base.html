@@ -96,60 +96,83 @@
 <body class="h-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <div class="min-h-full flex flex-col">
         <!-- Header -->
-        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+            <!-- Accent bar -->
+            <div class="h-1 bg-gradient-to-r from-primary-400 via-primary-500 to-secondary-400"></div>
+
             <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
+                <div class="flex justify-between items-center h-14">
                     <!-- Logo and Title -->
                     <div class="flex items-center space-x-3">
-                        <div class="flex-shrink-0">
-                            <svg class="h-8 w-8 text-primary-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3"/>
-                                <circle cx="12" cy="4" r="2"/>
-                                <circle cx="20" cy="12" r="2"/>
-                                <circle cx="12" cy="20" r="2"/>
-                                <circle cx="4" cy="12" r="2"/>
-                                <line x1="12" y1="6" x2="12" y2="9"/>
-                                <line x1="18" y1="12" x2="15" y2="12"/>
-                                <line x1="12" y1="15" x2="12" y2="18"/>
-                                <line x1="9" y1="12" x2="6" y2="12"/>
-                            </svg>
-                        </div>
-                        <h1 class="text-xl font-bold text-gray-900 dark:text-white">CodeGraph</h1>
-                        <span class="hidden sm:inline-block text-sm text-gray-500 dark:text-gray-400">UI Component Knowledge Graph</span>
+                        <a href="/" class="flex items-center space-x-3 group">
+                            <div class="flex-shrink-0 p-2 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200">
+                                <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <circle cx="12" cy="4" r="2"/>
+                                    <circle cx="20" cy="12" r="2"/>
+                                    <circle cx="12" cy="20" r="2"/>
+                                    <circle cx="4" cy="12" r="2"/>
+                                    <line x1="12" y1="6" x2="12" y2="9"/>
+                                    <line x1="18" y1="12" x2="15" y2="12"/>
+                                    <line x1="12" y1="15" x2="12" y2="18"/>
+                                    <line x1="9" y1="12" x2="6" y2="12"/>
+                                </svg>
+                            </div>
+                            <div class="hidden sm:block">
+                                <h1 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">CodeGraph</h1>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 -mt-0.5">Knowledge Graph RAG</p>
+                            </div>
+                        </a>
                     </div>
 
                     <!-- Nav Links -->
-                    <nav class="hidden md:flex items-center space-x-1">
-                        <a href="/" class="nav-link active" data-page="upload">
-                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <nav class="hidden md:flex items-center bg-gray-100/80 dark:bg-gray-700/50 rounded-xl p-1">
+                        <a href="/" class="nav-link" data-page="upload">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                             </svg>
-                            Upload
+                            <span>Upload</span>
                         </a>
                         <a href="/query" class="nav-link" data-page="query">
-                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
-                            Query
+                            <span>Query</span>
                         </a>
                         <a href="/graph" class="nav-link" data-page="graph">
-                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
-                            Graph
+                            <span>Graph</span>
                         </a>
                         <a href="/dashboard/metrics" class="nav-link" data-page="metrics">
-                            <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                             </svg>
-                            Metrics
+                            <span>Metrics</span>
+                        </a>
+                        <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                        <a href="/api/docs" class="nav-link" data-page="docs" target="_blank">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                            </svg>
+                            <span>API</span>
                         </a>
                     </nav>
 
                     <!-- Right side actions -->
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2">
+                        <!-- Health indicator -->
+                        <div id="healthIndicator" class="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-full text-xs font-medium" title="Server status">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-gray-600 dark:text-gray-300">Online</span>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700"></div>
+
                         <!-- Dark mode toggle -->
-                        <button id="darkModeToggle" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400">
+                        <button id="darkModeToggle" class="p-2 rounded-xl text-gray-500 hover:text-primary-600 hover:bg-primary-50 dark:text-gray-400 dark:hover:text-primary-400 dark:hover:bg-primary-900/30 transition-all duration-200" title="Toggle theme">
                             <svg id="sunIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                             </svg>
@@ -158,11 +181,12 @@
                             </svg>
                         </button>
 
-                        <!-- Health indicator -->
-                        <div id="healthIndicator" class="flex items-center space-x-1.5 text-sm">
-                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span class="hidden sm:inline text-gray-500 dark:text-gray-400">Connected</span>
-                        </div>
+                        <!-- Mobile menu button -->
+                        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -313,17 +337,19 @@
 
         // Health check
         async function checkHealth() {
+            const indicator = document.getElementById('healthIndicator');
             try {
                 const response = await fetch('/health');
-                const indicator = document.getElementById('healthIndicator');
                 if (response.ok) {
-                    indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span><span class="hidden sm:inline text-gray-500 dark:text-gray-400">Connected</span>';
+                    indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span class="text-gray-600 dark:text-gray-300">Online</span>';
+                    indicator.className = 'hidden sm:flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 rounded-full text-xs font-medium';
                 } else {
-                    indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span class="hidden sm:inline text-gray-500 dark:text-gray-400">Error</span>';
+                    indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span class="text-gray-600 dark:text-gray-300">Error</span>';
+                    indicator.className = 'hidden sm:flex items-center space-x-1.5 px-3 py-1.5 bg-red-50 dark:bg-red-900/30 rounded-full text-xs font-medium';
                 }
             } catch {
-                const indicator = document.getElementById('healthIndicator');
-                indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-primary-400"></span><span class="hidden sm:inline text-gray-500 dark:text-gray-400">Offline</span>';
+                indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-primary-400"></span><span class="text-gray-600 dark:text-gray-300">Offline</span>';
+                indicator.className = 'hidden sm:flex items-center space-x-1.5 px-3 py-1.5 bg-primary-50 dark:bg-primary-900/30 rounded-full text-xs font-medium';
             }
         }
 
@@ -356,21 +382,21 @@
     <style>
         /* Navigation link styles */
         .nav-link {
-            @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700;
+            @apply flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg text-gray-600 hover:text-primary-700 hover:bg-white dark:text-gray-300 dark:hover:text-primary-300 dark:hover:bg-gray-600 transition-all duration-200;
         }
         .nav-link.active {
-            @apply bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300;
+            @apply bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm;
         }
 
         .mobile-nav-link {
-            @apply flex flex-col items-center justify-center p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400;
+            @apply flex flex-col items-center justify-center p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors;
         }
         .mobile-nav-link.active {
             @apply text-primary-600 dark:text-primary-400;
         }
 
         .sidebar-link {
-            @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700;
+            @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition-colors;
         }
         .sidebar-link.active {
             @apply bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300;
