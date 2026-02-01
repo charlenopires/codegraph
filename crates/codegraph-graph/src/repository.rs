@@ -723,25 +723,31 @@ impl Neo4jRepository {
 
     /// Count nodes by label
     pub async fn count_by_label(&self) -> anyhow::Result<Vec<(String, u64)>> {
-        let cypher = r#"
-            CALL db.labels() YIELD label
-            CALL {
-                WITH label
-                MATCH (n)
-                WHERE label IN labels(n)
-                RETURN count(n) as count
-            }
-            RETURN label, count
-            ORDER BY count DESC
-        "#;
-
-        let mut result = self.graph.execute(query(cypher)).await?;
+        // Use a simpler query that works with more Neo4j versions
+        // Count UIElement and other common labels directly
         let mut counts = Vec::new();
 
-        while let Some(row) = result.next().await? {
-            let label: String = row.get("label").unwrap_or_default();
-            let count: i64 = row.get("count").unwrap_or(0);
-            counts.push((label, count as u64));
+        // Count UIElements
+        let ui_count = self.count().await.unwrap_or(0);
+        if ui_count > 0 {
+            counts.push(("UIElement".to_string(), ui_count));
+        }
+
+        // Count Snippets
+        let snippet_count = self.count_snippets().await.unwrap_or(0);
+        if snippet_count > 0 {
+            counts.push(("Snippet".to_string(), snippet_count));
+        }
+
+        // Count DesignSystems
+        let ds_cypher = "MATCH (d:DesignSystem) RETURN count(d) as count";
+        if let Ok(mut result) = self.graph.execute(query(ds_cypher)).await {
+            if let Ok(Some(row)) = result.next().await {
+                let count: i64 = row.get("count").unwrap_or(0);
+                if count > 0 {
+                    counts.push(("DesignSystem".to_string(), count as u64));
+                }
+            }
         }
 
         Ok(counts)

@@ -52,11 +52,15 @@ async fn validate_connections(
 
     // Validate Qdrant if available
     if let Some(qdrant_repo) = qdrant {
-        match qdrant_repo.collection_info("ui_elements").await {
-            Ok(info) => info!(
-                "Qdrant validated: {} points in ui_elements collection",
-                info.points_count
-            ),
+        match qdrant_repo.all_collections_info().await {
+            Ok(infos) => {
+                let total_points: u64 = infos.iter().map(|i| i.points_count).sum();
+                info!(
+                    "Qdrant validated: {} collections, {} total points",
+                    infos.len(),
+                    total_points
+                );
+            }
             Err(e) => {
                 warn!("Qdrant validation warning: {}. Vector search may not work.", e);
                 // Don't fail - Qdrant is optional

@@ -20,9 +20,14 @@ pub async fn serve(state: AppState, port: u16) -> anyhow::Result<()> {
     info!("Starting CodeGraph API on {}", addr);
 
     let listener = TcpListener::bind(addr).await?;
-    axum::serve(listener, app)
-        .with_graceful_shutdown(shutdown_signal())
-        .await?;
+
+    // Use into_make_service_with_connect_info to provide client IP for rate limiting
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .with_graceful_shutdown(shutdown_signal())
+    .await?;
 
     info!("Server shutdown complete");
     Ok(())
