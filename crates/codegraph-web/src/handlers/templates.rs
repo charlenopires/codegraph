@@ -24,7 +24,7 @@ macro_rules! include_template {
             "/templates/",
             $content
         ));
-        base.replace("{% block content %}{% endblock %}", content)
+        base.replace("{{content}}", content)
     }};
 }
 
@@ -36,7 +36,7 @@ fn render_page(content: &str, active_nav: &str) -> String {
     ));
 
     // Replace content placeholder
-    let html = base.replace("{% block content %}{% endblock %}", content);
+    let html = base.replace("{{content}}", content);
 
     // Mark active nav item
     let html = match active_nav {
