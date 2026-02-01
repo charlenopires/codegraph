@@ -68,13 +68,13 @@
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Feedback Ratio</p>
                     <p id="metricFeedbackRatio" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--%</p>
                 </div>
-                <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-3 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg">
+                    <svg class="w-6 h-6 text-secondary-600 dark:text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
                     </svg>
                 </div>
             </div>
-            <p class="text-sm text-purple-600 dark:text-purple-400 mt-2">
+            <p class="text-sm text-secondary-600 dark:text-secondary-400 mt-2">
                 Positive / Total
             </p>
         </div>
@@ -137,14 +137,14 @@
             <div class="flex items-center">
                 <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Tailwind</span>
                 <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-cyan-500 rounded-full" style="width: 45%"></div>
+                    <div class="h-full bg-primary-400 rounded-full" style="width: 45%"></div>
                 </div>
                 <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">45%</span>
             </div>
             <div class="flex items-center">
                 <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Bootstrap</span>
                 <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-purple-500 rounded-full" style="width: 25%"></div>
+                    <div class="h-full bg-secondary-400 rounded-full" style="width: 25%"></div>
                 </div>
                 <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">25%</span>
             </div>
@@ -165,7 +165,7 @@
             <div class="flex items-center">
                 <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Other</span>
                 <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-orange-500 rounded-full" style="width: 5%"></div>
+                    <div class="h-full bg-primary-600 rounded-full" style="width: 5%"></div>
                 </div>
                 <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">5%</span>
             </div>
@@ -214,7 +214,7 @@
         }
 
         const total = Object.values(categories).reduce((a, b) => a + b, 0);
-        const colors = ['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
+        const colors = ['#F59E0B', '#FB7185', '#10B981', '#3B82F6', '#6B7280'];
 
         let html = '<div class="space-y-2 w-full">';
         Object.entries(categories).slice(0, 5).forEach(([name, count], i) => {

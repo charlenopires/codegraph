@@ -35,14 +35,14 @@
         <div class="absolute bottom-4 left-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3">
             <div class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">Node Types</div>
             <div class="space-y-1 text-xs">
-                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span> UIElement</div>
-                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span> DesignSystem</div>
-                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span> Category</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-primary-500 mr-2"></span> UIElement</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-secondary-400 mr-2"></span> DesignSystem</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-500 mr-2"></span> Category</div>
             </div>
             <div class="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-3 mb-2">Relationships</div>
             <div class="space-y-1 text-xs">
-                <div class="flex items-center"><span class="w-6 border-t-2 border-blue-400 mr-2"></span> SIMILAR_TO</div>
-                <div class="flex items-center"><span class="w-6 border-t-2 border-green-400 border-dashed mr-2"></span> USES_DESIGN_SYSTEM</div>
+                <div class="flex items-center"><span class="w-6 border-t-2 border-primary-400 mr-2"></span> SIMILAR_TO</div>
+                <div class="flex items-center"><span class="w-6 border-t-2 border-emerald-400 border-dashed mr-2"></span> USES_DESIGN_SYSTEM</div>
                 <div class="flex items-center"><span class="w-6 border-t-2 border-gray-400 mr-2"></span> HAS_CATEGORY</div>
             </div>
         </div>
@@ -83,11 +83,11 @@
             <div class="text-sm text-gray-500 dark:text-gray-400">Relationships</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 text-center">
-            <div id="statDegree" class="text-2xl font-bold text-purple-600">0</div>
+            <div id="statDegree" class="text-2xl font-bold text-secondary-500">0</div>
             <div class="text-sm text-gray-500 dark:text-gray-400">Avg Degree</div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 text-center">
-            <div id="statCategories" class="text-2xl font-bold text-orange-600">0</div>
+            <div id="statCategories" class="text-2xl font-bold text-primary-500">0</div>
             <div class="text-sm text-gray-500 dark:text-gray-400">Categories</div>
         </div>
     </div>
@@ -125,7 +125,7 @@
             .attr('markerHeight', 6)
             .attr('orient', 'auto')
             .append('path')
-            .attr('fill', d => d === 'similar' ? '#60a5fa' : d === 'uses' ? '#4ade80' : '#9ca3af')
+            .attr('fill', d => d === 'similar' ? '#FDB022' : d === 'uses' ? '#10B981' : '#6B7280')
             .attr('d', 'M0,-5L10,0L0,5');
 
         link = g.append('g').attr('class', 'links').selectAll('line');
@@ -258,7 +258,7 @@
         link.exit().remove();
         link = link.enter()
             .append('line')
-            .attr('stroke', d => d.type === 'similar' ? '#60a5fa' : d.type === 'uses' ? '#4ade80' : '#9ca3af')
+            .attr('stroke', d => d.type === 'similar' ? '#FDB022' : d.type === 'uses' ? '#10B981' : '#6B7280')
             .attr('stroke-width', 1.5)
             .attr('stroke-dasharray', d => d.type === 'uses' ? '5,5' : null)
             .attr('marker-end', d => `url(#arrow-${d.type})`)
@@ -280,9 +280,9 @@
         nodeEnter.append('circle')
             .attr('r', d => d.type === 'element' ? 8 : 12)
             .attr('fill', d => {
-                if (d.type === 'element') return '#3b82f6';
-                if (d.type === 'design_system') return '#a855f7';
-                return '#22c55e';
+                if (d.type === 'element') return '#F59E0B';
+                if (d.type === 'design_system') return '#FB7185';
+                return '#10B981';
             })
             .attr('stroke', '#fff')
             .attr('stroke-width', 2);

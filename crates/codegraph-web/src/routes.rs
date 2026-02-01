@@ -13,7 +13,7 @@ use tower_http::{
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
-use crate::handlers::{feedback, generate, graph, metrics, query, snippets};
+use crate::handlers::{feedback, generate, graph, metrics, query, snippets, templates};
 use crate::health;
 use crate::middleware::{rate_limit, request_id};
 use crate::prometheus::{metrics_handler, metrics_middleware};
@@ -134,6 +134,12 @@ pub fn create_router(state: AppState) -> Router {
         .into();
 
     Router::new()
+        // Web dashboard pages (HTMX)
+        .route("/", get(templates::home))
+        .route("/upload", get(templates::upload_page))
+        .route("/query", get(templates::query_page))
+        .route("/graph", get(templates::graph_page))
+        .route("/metrics", get(templates::metrics_page))
         // Health endpoints (required for Docker healthchecks)
         .route("/health", get(health::health_check))
         .route("/health/ready", get(health::readiness_check))
