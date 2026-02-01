@@ -43,12 +43,12 @@
             </p>
         </div>
 
-        <!-- Average Confidence -->
+        <!-- Average Degree (Graph Connectivity) -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Avg Confidence</p>
-                    <p id="metricAvgConfidence" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--%</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Avg Degree</p>
+                    <p id="metricAvgConfidence" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
                 </div>
                 <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
                     <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                NARS truth-value
+                Graph connectivity
             </p>
         </div>
 
@@ -174,58 +174,75 @@
 </div>
 
 <script>
-    // Fetch and update metrics
+    // Fetch and update metrics from both endpoints
     async function loadMetrics() {
         try {
-            const response = await fetch('/api/metrics');
-            const data = await response.json();
+            // Fetch RLKGF metrics
+            const metricsResponse = await fetch('/api/metrics');
+            const metrics = await metricsResponse.json();
 
-            document.getElementById('metricTotalElements').textContent = data.total_elements || 0;
-            document.getElementById('metricTotalRelations').textContent = data.total_relations || 0;
+            // Fetch graph stats for relationships
+            const graphResponse = await fetch('/api/graph/stats');
+            const graph = await graphResponse.json();
+
+            // Update total elements
+            document.getElementById('metricTotalElements').textContent = metrics.total_elements || 0;
+
+            // Update total relationships from graph stats
+            document.getElementById('metricTotalRelations').textContent = graph.total_relationships || 0;
+
+            // Calculate average degree as a proxy for "confidence" (how connected the graph is)
+            const avgDegree = graph.avg_degree || 0;
             document.getElementById('metricAvgConfidence').textContent =
-                data.avg_confidence ? Math.round(data.avg_confidence * 100) + '%' : '0%';
+                avgDegree > 0 ? avgDegree.toFixed(1) : '0';
+
+            // Calculate feedback ratio from positive/total
+            const feedbackRatio = metrics.total_feedback > 0
+                ? (metrics.positive_feedback / metrics.total_feedback)
+                : 0;
             document.getElementById('metricFeedbackRatio').textContent =
-                data.feedback_ratio ? Math.round(data.feedback_ratio * 100) + '%' : '0%';
+                Math.round(feedbackRatio * 100) + '%';
+
+            // Update category chart with elements_by_category
+            if (metrics.elements_by_category && metrics.elements_by_category.length > 0) {
+                renderCategoryChart(metrics.elements_by_category);
+            }
+
+            // Update design system stats with real data
+            if (metrics.elements_by_design_system && metrics.elements_by_design_system.length > 0) {
+                renderDesignSystemStats(metrics.elements_by_design_system);
+            }
+
         } catch (error) {
             console.error('Failed to load metrics:', error);
         }
     }
 
-    // Load graph stats for charts
-    async function loadGraphStats() {
-        try {
-            const response = await fetch('/api/graph/stats');
-            const data = await response.json();
-
-            // Update category distribution chart with real data
-            if (data.categories) {
-                renderCategoryChart(data.categories);
-            }
-        } catch (error) {
-            console.error('Failed to load graph stats:', error);
-        }
-    }
-
-    // Simple bar chart for categories
+    // Render category distribution chart
     function renderCategoryChart(categories) {
         const container = document.getElementById('categoryChart');
-        if (!categories || Object.keys(categories).length === 0) {
+        if (!categories || categories.length === 0) {
             return;
         }
 
-        const total = Object.values(categories).reduce((a, b) => a + b, 0);
+        const total = categories.reduce((sum, c) => sum + c.count, 0);
+        if (total === 0) {
+            container.innerHTML = '<div class="text-center text-gray-400 py-8">No categories yet</div>';
+            return;
+        }
+
         const colors = ['#F59E0B', '#FB7185', '#10B981', '#3B82F6', '#6B7280'];
 
         let html = '<div class="space-y-2 w-full">';
-        Object.entries(categories).slice(0, 5).forEach(([name, count], i) => {
-            const pct = Math.round((count / total) * 100);
+        categories.slice(0, 5).forEach((item, i) => {
+            const pct = Math.round((item.count / total) * 100);
             html += `
                 <div class="flex items-center">
-                    <span class="w-20 text-xs text-gray-600 dark:text-gray-400 truncate">${name}</span>
+                    <span class="w-20 text-xs text-gray-600 dark:text-gray-400 truncate capitalize">${item.category}</span>
                     <div class="flex-1 h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mx-2">
-                        <div class="h-full rounded-full" style="width: ${pct}%; background-color: ${colors[i]}"></div>
+                        <div class="h-full rounded-full" style="width: ${pct}%; background-color: ${colors[i % colors.length]}"></div>
                     </div>
-                    <span class="w-8 text-right text-xs text-gray-600 dark:text-gray-400">${count}</span>
+                    <span class="w-8 text-right text-xs text-gray-600 dark:text-gray-400">${item.count}</span>
                 </div>
             `;
         });
@@ -233,9 +250,45 @@
         container.innerHTML = html;
     }
 
+    // Render design system statistics
+    function renderDesignSystemStats(designSystems) {
+        const container = document.getElementById('designSystemStats');
+        if (!designSystems || designSystems.length === 0) {
+            return;
+        }
+
+        const total = designSystems.reduce((sum, ds) => sum + ds.count, 0);
+        if (total === 0) return;
+
+        const colorMap = {
+            'tailwind': 'bg-primary-400',
+            'bootstrap': 'bg-secondary-400',
+            'material-ui': 'bg-blue-500',
+            'chakra-ui': 'bg-emerald-500',
+            'shadcn': 'bg-gray-500'
+        };
+
+        let html = '';
+        designSystems.forEach(ds => {
+            const pct = Math.round((ds.count / total) * 100);
+            const colorClass = colorMap[ds.design_system.toLowerCase()] || 'bg-primary-600';
+            const displayName = ds.design_system.charAt(0).toUpperCase() + ds.design_system.slice(1);
+
+            html += `
+                <div class="flex items-center">
+                    <span class="w-24 text-sm text-gray-600 dark:text-gray-400">${displayName}</span>
+                    <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div class="h-full ${colorClass} rounded-full" style="width: ${pct}%"></div>
+                    </div>
+                    <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">${pct}%</span>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
     // Initialize
     loadMetrics();
-    loadGraphStats();
 
     // Refresh every 30 seconds
     setInterval(loadMetrics, 30000);

@@ -27,7 +27,7 @@ pub async fn list_elements(
     State(state): State<AppState>,
     Query(query): Query<ListElementsQuery>,
 ) -> Result<Json<ListElementsResponse>, (StatusCode, Json<ApiError>)> {
-    // Get elements by category if filter is provided
+    // Get elements with optional category filter
     let elements = if let Some(category) = &query.category {
         state
             .repository
@@ -40,8 +40,17 @@ pub async fn list_elements(
                 )
             })?
     } else {
-        // TODO: Implement pagination and full list
-        vec![]
+        // Get all elements (limited for performance)
+        state
+            .repository
+            .list_all_elements(query.per_page as usize * 5) // Fetch enough for pagination
+            .await
+            .map_err(|e| {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    Json(ApiError::new("database_error", e.to_string())),
+                )
+            })?
     };
 
     let element_summaries: Vec<ElementSummary> = elements
@@ -98,36 +107,32 @@ pub async fn get_graph_stats(
     // Get total node count
     let total_nodes = state.repository.count().await.unwrap_or(0);
 
-    // TODO: Get actual relationship count and stats from Neo4j
-    let total_relationships = 0u64;
+    // Get actual relationship count from Neo4j
+    let total_relationships = state.repository.count_relationships().await.unwrap_or(0);
 
-    let nodes_by_label = vec![
-        LabelCount {
+    // Get nodes by label from Neo4j
+    let label_counts = state.repository.count_by_label().await.unwrap_or_default();
+    let nodes_by_label: Vec<LabelCount> = if label_counts.is_empty() {
+        // Fallback to basic count if query fails
+        vec![LabelCount {
             label: "UIElement".to_string(),
             count: total_nodes,
-        },
-        LabelCount {
-            label: "DesignSystem".to_string(),
-            count: 0,
-        },
-    ];
+        }]
+    } else {
+        label_counts
+            .into_iter()
+            .map(|(label, count)| LabelCount { label, count })
+            .collect()
+    };
 
-    let relationships_by_type = vec![
-        RelationshipTypeCount {
-            relationship_type: "SIMILAR_TO".to_string(),
-            count: 0,
-        },
-        RelationshipTypeCount {
-            relationship_type: "PART_OF".to_string(),
-            count: 0,
-        },
-        RelationshipTypeCount {
-            relationship_type: "USES_DESIGN_SYSTEM".to_string(),
-            count: 0,
-        },
-    ];
+    // Get relationships by type from Neo4j
+    let rel_counts = state.repository.count_relationships_by_type().await.unwrap_or_default();
+    let relationships_by_type: Vec<RelationshipTypeCount> = rel_counts
+        .into_iter()
+        .map(|(relationship_type, count)| RelationshipTypeCount { relationship_type, count })
+        .collect();
 
-    // Calculate average degree
+    // Calculate average degree (edges * 2 / nodes for undirected, edges / nodes for directed)
     let avg_degree = if total_nodes > 0 {
         (total_relationships as f64 * 2.0) / total_nodes as f64
     } else {

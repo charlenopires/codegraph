@@ -360,10 +360,15 @@
         // Update stats from API
         async function updateStats() {
             try {
-                const response = await fetch('/api/metrics');
-                const data = await response.json();
-                document.getElementById('totalElements').textContent = data.total_elements || 0;
-                document.getElementById('avgConfidence').textContent = '85%'; // Placeholder
+                const metricsResponse = await fetch('/api/metrics');
+                const metrics = await metricsResponse.json();
+                document.getElementById('totalElements').textContent = metrics.total_elements || 0;
+
+                // Calculate feedback ratio as a confidence proxy
+                const feedbackRatio = metrics.total_feedback > 0
+                    ? Math.round((metrics.positive_feedback / metrics.total_feedback) * 100)
+                    : 0;
+                document.getElementById('avgConfidence').textContent = feedbackRatio + '%';
             } catch {
                 // Silently fail
             }

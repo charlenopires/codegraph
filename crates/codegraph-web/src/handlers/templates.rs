@@ -3,30 +3,9 @@
 //! Serves the web dashboard templates with HTMX support.
 
 use axum::{
-    extract::State,
     http::{header, StatusCode},
     response::{Html, IntoResponse, Response},
 };
-use std::sync::Arc;
-
-use crate::state::AppState;
-
-/// Include template at compile time
-macro_rules! include_template {
-    ($base:expr, $content:expr) => {{
-        let base = include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/templates/",
-            $base
-        ));
-        let content = include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/templates/",
-            $content
-        ));
-        base.replace("{{content}}", content)
-    }};
-}
 
 /// Render base template with content
 fn render_page(content: &str, active_nav: &str) -> String {

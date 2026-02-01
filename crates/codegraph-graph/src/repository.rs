@@ -138,6 +138,31 @@ impl Neo4jRepository {
         Ok(element)
     }
 
+    /// List all elements with limit
+    pub async fn list_all_elements(&self, limit: usize) -> anyhow::Result<Vec<UIElement>> {
+        let start = Instant::now();
+
+        let cypher = r#"
+            MATCH (e:UIElement)
+            RETURN e
+            ORDER BY e.updated_at DESC
+            LIMIT $limit
+        "#;
+
+        let mut result = self
+            .graph
+            .execute(query(cypher).param("limit", limit as i64))
+            .await?;
+
+        let mut elements = Vec::new();
+        while let Some(row) = result.next().await? {
+            elements.push(self.row_to_element(&row)?);
+        }
+
+        self.check_latency("list_all_elements", start);
+        Ok(elements)
+    }
+
     /// Find elements by category
     pub async fn find_by_category(&self, category: &str) -> anyhow::Result<Vec<UIElement>> {
         let start = Instant::now();
@@ -613,5 +638,112 @@ impl Neo4jRepository {
         } else {
             debug!("{} completed in {}ms", operation, elapsed_ms);
         }
+    }
+
+    // ==================== Statistics Methods ====================
+
+    /// Count elements grouped by category
+    pub async fn count_by_category(&self) -> anyhow::Result<Vec<(String, u64)>> {
+        let cypher = r#"
+            MATCH (e:UIElement)
+            WHERE e.category IS NOT NULL
+            RETURN e.category as category, count(e) as count
+            ORDER BY count DESC
+        "#;
+
+        let mut result = self.graph.execute(query(cypher)).await?;
+        let mut counts = Vec::new();
+
+        while let Some(row) = result.next().await? {
+            let category: String = row.get("category").unwrap_or_default();
+            let count: i64 = row.get("count").unwrap_or(0);
+            if !category.is_empty() {
+                counts.push((category, count as u64));
+            }
+        }
+
+        Ok(counts)
+    }
+
+    /// Count elements grouped by design system
+    pub async fn count_by_design_system(&self) -> anyhow::Result<Vec<(String, u64)>> {
+        let cypher = r#"
+            MATCH (e:UIElement)
+            WHERE e.design_system IS NOT NULL
+            RETURN e.design_system as design_system, count(e) as count
+            ORDER BY count DESC
+        "#;
+
+        let mut result = self.graph.execute(query(cypher)).await?;
+        let mut counts = Vec::new();
+
+        while let Some(row) = result.next().await? {
+            let design_system: String = row.get("design_system").unwrap_or_default();
+            let count: i64 = row.get("count").unwrap_or(0);
+            if !design_system.is_empty() {
+                counts.push((design_system, count as u64));
+            }
+        }
+
+        Ok(counts)
+    }
+
+    /// Count total relationships in the graph
+    pub async fn count_relationships(&self) -> anyhow::Result<u64> {
+        let cypher = "MATCH ()-[r]->() RETURN count(r) as count";
+        let mut result = self.graph.execute(query(cypher)).await?;
+
+        if let Some(row) = result.next().await? {
+            let count: i64 = row.get("count").unwrap_or(0);
+            return Ok(count as u64);
+        }
+
+        Ok(0)
+    }
+
+    /// Count relationships grouped by type
+    pub async fn count_relationships_by_type(&self) -> anyhow::Result<Vec<(String, u64)>> {
+        let cypher = r#"
+            MATCH ()-[r]->()
+            RETURN type(r) as rel_type, count(r) as count
+            ORDER BY count DESC
+        "#;
+
+        let mut result = self.graph.execute(query(cypher)).await?;
+        let mut counts = Vec::new();
+
+        while let Some(row) = result.next().await? {
+            let rel_type: String = row.get("rel_type").unwrap_or_default();
+            let count: i64 = row.get("count").unwrap_or(0);
+            counts.push((rel_type, count as u64));
+        }
+
+        Ok(counts)
+    }
+
+    /// Count nodes by label
+    pub async fn count_by_label(&self) -> anyhow::Result<Vec<(String, u64)>> {
+        let cypher = r#"
+            CALL db.labels() YIELD label
+            CALL {
+                WITH label
+                MATCH (n)
+                WHERE label IN labels(n)
+                RETURN count(n) as count
+            }
+            RETURN label, count
+            ORDER BY count DESC
+        "#;
+
+        let mut result = self.graph.execute(query(cypher)).await?;
+        let mut counts = Vec::new();
+
+        while let Some(row) = result.next().await? {
+            let label: String = row.get("label").unwrap_or_default();
+            let count: i64 = row.get("count").unwrap_or(0);
+            counts.push((label, count as u64));
+        }
+
+        Ok(counts)
     }
 }

@@ -24,36 +24,19 @@ pub async fn get_metrics(
     // Get metrics from collector
     let metrics = state.metrics.read().await;
 
-    // TODO: Get actual counts by category and design system from graph
-    let elements_by_category = vec![
-        CategoryCount {
-            category: "button".to_string(),
-            count: 0,
-        },
-        CategoryCount {
-            category: "card".to_string(),
-            count: 0,
-        },
-        CategoryCount {
-            category: "form".to_string(),
-            count: 0,
-        },
-    ];
+    // Get actual counts by category from Neo4j
+    let category_counts = state.repository.count_by_category().await.unwrap_or_default();
+    let elements_by_category: Vec<CategoryCount> = category_counts
+        .into_iter()
+        .map(|(category, count)| CategoryCount { category, count })
+        .collect();
 
-    let elements_by_design_system = vec![
-        DesignSystemCount {
-            design_system: "tailwind".to_string(),
-            count: 0,
-        },
-        DesignSystemCount {
-            design_system: "bootstrap".to_string(),
-            count: 0,
-        },
-        DesignSystemCount {
-            design_system: "material-ui".to_string(),
-            count: 0,
-        },
-    ];
+    // Get actual counts by design system from Neo4j
+    let ds_counts = state.repository.count_by_design_system().await.unwrap_or_default();
+    let elements_by_design_system: Vec<DesignSystemCount> = ds_counts
+        .into_iter()
+        .map(|(design_system, count)| DesignSystemCount { design_system, count })
+        .collect();
 
     Ok(Json(RLKGFMetrics {
         total_elements,
