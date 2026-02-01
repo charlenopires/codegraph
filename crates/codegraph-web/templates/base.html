@@ -74,18 +74,28 @@
     <style>
         /* CodeMirror custom styles */
         .CodeMirror {
-            height: 280px !important;
-            border-radius: 0.75rem;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 280px;
+            border-radius: 0;
             font-size: 13px;
             font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
         }
         .CodeMirror-focused {
-            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+            box-shadow: inset 0 0 0 2px rgba(245, 158, 11, 0.4);
         }
         .editor-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 320px;
             border: 1px solid #374151;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             overflow: hidden;
+            background: #282a36;
+        }
+        .editor-wrapper .CodeMirror {
+            flex: 1;
         }
         .editor-header {
             display: flex;
@@ -94,6 +104,7 @@
             padding: 0.5rem 0.75rem;
             background: #1e1e1e;
             border-bottom: 1px solid #374151;
+            flex-shrink: 0;
         }
         .editor-header .lang-badge {
             display: flex;
@@ -170,7 +181,7 @@
                     </div>
 
                     <!-- Nav Links - Centered -->
-                    <nav class="hidden md:flex items-center bg-gray-100/80 dark:bg-gray-700/50 rounded-2xl p-1.5 gap-1">
+                    <nav class="hidden md:flex items-center bg-gray-100 dark:bg-gray-700/80 rounded-2xl p-2 gap-2 shadow-inner">
                         <a href="/" class="nav-link" data-page="upload">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
@@ -433,17 +444,23 @@
     <style>
         /* Navigation link styles */
         .nav-link {
-            @apply flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl text-gray-600 hover:text-primary-700 hover:bg-white dark:text-gray-300 dark:hover:text-primary-300 dark:hover:bg-gray-600 transition-all duration-200;
+            @apply flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium rounded-xl text-gray-500 transition-all duration-200;
+        }
+        .nav-link:hover {
+            @apply text-primary-600 bg-white dark:text-primary-400 dark:bg-gray-600 shadow-sm scale-105;
         }
         .nav-link.active {
-            @apply bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-sm;
+            @apply bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-md;
         }
 
         .mobile-nav-link {
-            @apply flex flex-col items-center justify-center p-3 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors;
+            @apply flex flex-col items-center justify-center p-3 text-gray-500 transition-all duration-200;
+        }
+        .mobile-nav-link:hover {
+            @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 scale-105;
         }
         .mobile-nav-link.active {
-            @apply text-primary-600 dark:text-primary-400;
+            @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30;
         }
 
         .sidebar-link {
