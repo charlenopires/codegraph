@@ -9,11 +9,12 @@ use clap::Parser;
 use tracing::{error, info, warn};
 
 use codegraph_extraction::embedding::EmbeddingGenerator;
+use codegraph_extraction::ExtractionPipeline;
 use codegraph_generation::VanillaCodeGenerator;
 use codegraph_graph::Neo4jRepository;
 use codegraph_retrieval::HybridRetriever;
 use codegraph_vector::{QdrantConfig, QdrantRepository};
-use codegraph_web::AppState;
+use codegraph_ws::SharedState;
 
 #[derive(Parser)]
 #[command(name = "codegraph")]
@@ -25,7 +26,7 @@ struct Cli {
 
 #[derive(clap::Subcommand)]
 enum Commands {
-    /// Start the web server
+    /// Start the WebSocket server
     Serve {
         #[arg(short, long, default_value = "3000")]
         port: u16,
@@ -38,11 +39,11 @@ enum Commands {
 
 /// Validate that all services are reachable before serving requests
 async fn validate_connections(
-    state: &AppState,
+    repository: &Neo4jRepository,
     qdrant: Option<&Arc<QdrantRepository>>,
 ) -> anyhow::Result<()> {
     // Validate Neo4j by running a simple count query
-    match state.repository.count().await {
+    match repository.count().await {
         Ok(count) => info!("Neo4j validated: {} UI elements in database", count),
         Err(e) => {
             error!("Neo4j validation failed: {}", e);
@@ -82,7 +83,7 @@ async fn validate_connections(
 }
 
 /// Initialize all application components
-async fn init_app_state() -> anyhow::Result<AppState> {
+async fn init_shared_state() -> anyhow::Result<SharedState> {
     info!("Initializing CodeGraph application state...");
 
     // 1. Initialize Neo4j repository
@@ -141,9 +142,11 @@ async fn init_app_state() -> anyhow::Result<AppState> {
         warn!("OPENAI_API_KEY not set. Code generation will use fallback templates.");
     }
 
-    // 5. Create AppState with all components
-    // Note: Retriever is configured later in AppState::new since Neo4j can't be cloned
-    info!("Creating application state...");
+    // 5. Initialize extraction pipeline
+    let extraction = ExtractionPipeline::new();
+
+    // 6. Create retriever with all components
+    info!("Creating retriever...");
     let retriever = HybridRetriever::new().with_embedding_generator(embedding_generator);
 
     // If Qdrant is available, configure it in the retriever
@@ -153,11 +156,13 @@ async fn init_app_state() -> anyhow::Result<AppState> {
         retriever
     };
 
-    let state = AppState::new(neo4j_repository, retriever, generator).await?;
-
-    // 6. Validate connections before serving requests
+    // 7. Validate connections before serving requests
     info!("Validating service connections...");
-    validate_connections(&state, qdrant_repository.as_ref()).await?;
+    validate_connections(&neo4j_repository, qdrant_repository.as_ref()).await?;
+
+    // 8. Create SharedState with all components
+    info!("Creating shared state...");
+    let state = SharedState::new(neo4j_repository, retriever, generator, extraction);
 
     info!("Application state initialized successfully");
     Ok(state)
@@ -177,10 +182,10 @@ async fn main() -> anyhow::Result<()> {
     match cli.command {
         Commands::Serve { port } => {
             // Initialize all components
-            let state = init_app_state().await?;
+            let state = init_shared_state().await?;
 
-            // Start web server
-            codegraph_web::serve(state, port).await?;
+            // Start WebSocket server
+            codegraph_ws::serve(state, port).await?;
         }
         Commands::Mcp => {
             codegraph_mcp::run_stdio().await?;

@@ -15,4 +15,4 @@ pub use design_system::DesignSystemDetector;
 pub use embedding::EmbeddingGenerator;
 pub use narsese_gen::NarseseGenerator;
 pub use ontology::OntologyMapper;
-pub use pipeline::ExtractionPipeline;
+pub use pipeline::{ExtractionInput, ExtractionPipeline, ExtractionResult};

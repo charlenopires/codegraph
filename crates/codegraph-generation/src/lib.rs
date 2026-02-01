@@ -7,6 +7,7 @@ pub mod parser;
 pub mod prompt;
 pub mod templates;
 
-pub use generator::VanillaCodeGenerator;
-pub use parser::CodeParser;
+pub use generator::{GenerationRequest, GenerationResult, VanillaCodeGenerator};
+pub use parser::{CodeParser, ParsedCode};
+pub use prompt::SimilarElement;
 pub use templates::TemplateEngine;

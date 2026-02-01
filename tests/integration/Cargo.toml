@@ -37,7 +37,7 @@ codegraph-retrieval = { path = "../../crates/codegraph-retrieval" }
 codegraph-generation = { path = "../../crates/codegraph-generation" }
 codegraph-feedback = { path = "../../crates/codegraph-feedback" }
 codegraph-reasoning = { path = "../../crates/codegraph-reasoning" }
-codegraph-web = { path = "../../crates/codegraph-web" }
+codegraph-ws = { path = "../../crates/codegraph-ws" }
 
 # Async runtime
 tokio = { version = "1.43", features = ["full", "test-util"] }

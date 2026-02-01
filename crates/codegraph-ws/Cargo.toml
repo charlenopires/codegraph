@@ -1,0 +1,48 @@
+[package]
+name = "codegraph-ws"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "WebSocket API server for CodeGraph"
+
+[dependencies]
+# Workspace crates
+codegraph-core = { path = "../codegraph-core" }
+codegraph-extraction = { path = "../codegraph-extraction" }
+codegraph-graph = { path = "../codegraph-graph" }
+codegraph-reasoning = { path = "../codegraph-reasoning" }
+codegraph-retrieval = { path = "../codegraph-retrieval" }
+codegraph-generation = { path = "../codegraph-generation" }
+codegraph-feedback = { path = "../codegraph-feedback" }
+codegraph-vector = { path = "../codegraph-vector" }
+
+# Async runtime
+tokio = { workspace = true }
+futures = { workspace = true }
+async-trait = { workspace = true }
+
+# Web framework with WebSocket support
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Utils
+uuid = { workspace = true }
+chrono = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Concurrent state
+dashmap = "6.1"
+tokio-stream = "0.1"
+
+[dev-dependencies]
+tokio-test = { workspace = true }

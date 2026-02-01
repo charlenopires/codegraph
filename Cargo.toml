@@ -8,7 +8,7 @@ members = [
     "crates/codegraph-retrieval",
     "crates/codegraph-feedback",
     "crates/codegraph-generation",
-    "crates/codegraph-web",
+    "crates/codegraph-ws",
     "crates/codegraph-mcp",
     "crates/codegraph-benchmark",
     "crates/codegraph-cli",

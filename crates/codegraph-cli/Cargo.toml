@@ -9,7 +9,7 @@ path = "src/main.rs"
 
 [dependencies]
 codegraph-core = { path = "../codegraph-core" }
-codegraph-web = { path = "../codegraph-web" }
+codegraph-ws = { path = "../codegraph-ws" }
 codegraph-mcp = { path = "../codegraph-mcp" }
 codegraph-graph = { path = "../codegraph-graph" }
 codegraph-vector = { path = "../codegraph-vector" }
