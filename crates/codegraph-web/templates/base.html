@@ -181,7 +181,7 @@
                     </div>
 
                     <!-- Nav Links - Centered -->
-                    <nav class="hidden md:flex items-center bg-gray-100 dark:bg-gray-700/80 rounded-2xl p-2 gap-2 shadow-inner">
+                    <nav class="hidden md:flex items-center bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700/90 dark:to-gray-800/90 rounded-2xl p-2 gap-1 shadow-inner border border-gray-200/50 dark:border-gray-600/50">
                         <a href="/" class="nav-link" data-page="upload">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
@@ -258,8 +258,12 @@
                     <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                         <nav class="flex-1 px-3 space-y-1">
                             <!-- Design Systems section -->
-                            <div class="px-3 py-2">
-                                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Design Systems</h3>
+                            <div class="px-3 py-3 mb-2">
+                                <h3 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                    <span class="w-4 h-px bg-gray-300 dark:bg-gray-600"></span>
+                                    Design Systems
+                                    <span class="flex-1 h-px bg-gray-300 dark:bg-gray-600"></span>
+                                </h3>
                             </div>
                             <a href="#" class="sidebar-link" data-filter="tailwind">
                                 <span class="w-3 h-3 rounded-full bg-primary-400 mr-3"></span>
@@ -283,8 +287,12 @@
                             </a>
 
                             <!-- Categories section -->
-                            <div class="px-3 py-2 mt-6">
-                                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Categories</h3>
+                            <div class="px-3 py-3 mt-6 mb-2">
+                                <h3 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                                    <span class="w-4 h-px bg-gray-300 dark:bg-gray-600"></span>
+                                    Categories
+                                    <span class="flex-1 h-px bg-gray-300 dark:bg-gray-600"></span>
+                                </h3>
                             </div>
                             <a href="#" class="sidebar-link" data-filter="button">
                                 <span class="w-3 h-3 rounded bg-primary-500 mr-3"></span>
@@ -439,35 +447,106 @@
                 hljs.highlightElement(block);
             });
         });
+
+        // Sidebar filter links
+        document.querySelectorAll('.sidebar-link[data-filter]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const filter = link.dataset.filter;
+
+                // Remove active from all sidebar links
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                // Add active to clicked link
+                link.classList.add('active');
+
+                // Navigate to query page with filter
+                window.location.href = `/query?filter=${encodeURIComponent(filter)}`;
+            });
+        });
     </script>
 
     <style>
-        /* Navigation link styles */
+        /* Top Navigation link styles */
         .nav-link {
-            @apply flex items-center gap-2.5 px-5 py-2.5 text-sm font-medium rounded-xl text-gray-500 transition-all duration-200;
+            @apply relative flex items-center gap-2.5 px-5 py-2.5 text-sm font-semibold rounded-xl transition-all duration-300 ease-out;
+            @apply text-gray-600 dark:text-gray-400;
+        }
+        .nav-link::before {
+            content: '';
+            @apply absolute inset-0 rounded-xl opacity-0 transition-all duration-300;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(251, 113, 133, 0.1) 100%);
         }
         .nav-link:hover {
-            @apply text-primary-600 bg-white dark:text-primary-400 dark:bg-gray-600 shadow-sm scale-105;
+            @apply text-primary-700 dark:text-primary-300;
+            transform: translateY(-2px) scale(1.02);
+        }
+        .nav-link:hover::before {
+            @apply opacity-100;
+        }
+        .nav-link:hover svg {
+            @apply text-primary-500;
+            transform: scale(1.1);
+        }
+        .nav-link svg {
+            @apply transition-all duration-300;
         }
         .nav-link.active {
-            @apply bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400 shadow-md;
+            @apply bg-white dark:bg-gray-600 text-primary-600 dark:text-primary-400;
+            box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link.active::before {
+            @apply opacity-0;
         }
 
+        /* Mobile Navigation */
         .mobile-nav-link {
-            @apply flex flex-col items-center justify-center p-3 text-gray-500 transition-all duration-200;
+            @apply flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-300;
+            @apply text-gray-500 dark:text-gray-400;
         }
         .mobile-nav-link:hover {
-            @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 scale-105;
+            @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30;
+            transform: translateY(-2px);
+        }
+        .mobile-nav-link:hover svg {
+            transform: scale(1.15);
+        }
+        .mobile-nav-link svg {
+            @apply transition-transform duration-300;
         }
         .mobile-nav-link.active {
-            @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30;
+            @apply text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/40;
         }
 
+        /* Sidebar link styles */
         .sidebar-link {
-            @apply flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition-colors;
+            @apply relative flex items-center px-4 py-3 text-sm font-medium rounded-xl cursor-pointer;
+            @apply text-gray-600 dark:text-gray-400;
+            @apply transition-all duration-300 ease-out;
+        }
+        .sidebar-link::before {
+            content: '';
+            @apply absolute left-0 top-1/2 w-1 h-0 rounded-full bg-primary-500;
+            @apply transition-all duration-300;
+            transform: translateY(-50%);
+        }
+        .sidebar-link:hover {
+            @apply text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/30;
+            @apply pl-5;
+        }
+        .sidebar-link:hover::before {
+            @apply h-6;
+        }
+        .sidebar-link:hover span:first-child {
+            transform: scale(1.2);
+        }
+        .sidebar-link span:first-child {
+            @apply transition-transform duration-300;
         }
         .sidebar-link.active {
-            @apply bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300;
+            @apply bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 pl-5;
+        }
+        .sidebar-link.active::before {
+            @apply h-8 bg-primary-600;
         }
     </style>
 </body>
