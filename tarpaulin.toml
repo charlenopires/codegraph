@@ -1,0 +1,47 @@
+# Tarpaulin configuration for code coverage
+# Run with: cargo tarpaulin
+
+[default]
+# Critical crates requiring 60%+ coverage
+packages = [
+    "codegraph-extraction",
+    "codegraph-retrieval",
+    "codegraph-generation",
+    "codegraph-graph",
+    "codegraph-feedback",
+]
+
+# Output formats
+out = ["html", "xml"]
+output-dir = "coverage"
+
+# Don't count test code in coverage
+ignore-tests = true
+
+# Timeout for long-running tests
+timeout = "300s"
+
+# Fail if coverage drops below threshold
+fail-under = 60.0
+
+# Skip files that are hard to test
+exclude-files = [
+    "**/tests/*",
+    "**/examples/*",
+    "**/benches/*",
+]
+
+[ci]
+# CI-specific settings
+packages = [
+    "codegraph-extraction",
+    "codegraph-retrieval",
+    "codegraph-generation",
+    "codegraph-graph",
+    "codegraph-feedback",
+]
+out = ["xml"]
+output-dir = "coverage"
+ignore-tests = true
+timeout = "300s"
+fail-under = 60.0

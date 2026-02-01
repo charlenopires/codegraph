@@ -1,0 +1,37 @@
+[package]
+name = "codegraph-extraction"
+version.workspace = true
+edition = "2021"
+description = "AST extraction and code parsing"
+
+[dependencies]
+# Internal crates
+codegraph-reasoning = { path = "../codegraph-reasoning" }
+
+# Async runtime
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# AST parsing
+tree-sitter = { workspace = true }
+tree-sitter-html = { workspace = true }
+tree-sitter-css = { workspace = true }
+tree-sitter-javascript = { workspace = true }
+
+# LLM integration (for embeddings)
+async-openai = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Utils
+regex = { workspace = true }
+once_cell = { workspace = true }

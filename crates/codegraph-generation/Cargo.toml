@@ -1,0 +1,27 @@
+[package]
+name = "codegraph-generation"
+version.workspace = true
+edition = "2021"
+description = "Code generation with LLMs"
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true }
+async-trait = { workspace = true }
+
+# LLM integration
+async-openai = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Utils
+regex = { workspace = true }

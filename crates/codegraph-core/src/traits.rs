@@ -1,0 +1,1 @@
+//! Domain traits for CodeGraph

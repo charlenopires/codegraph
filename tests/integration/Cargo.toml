@@ -1,0 +1,51 @@
+[package]
+name = "codegraph-integration-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[[test]]
+name = "test_upload_extraction_storage"
+path = "test_upload_extraction_storage.rs"
+
+[[test]]
+name = "test_embedding_qdrant_storage"
+path = "test_embedding_qdrant_storage.rs"
+
+[[test]]
+name = "test_hybrid_retrieval"
+path = "test_hybrid_retrieval.rs"
+
+[[test]]
+name = "test_code_generation"
+path = "test_code_generation.rs"
+
+[[test]]
+name = "test_feedback_propagation"
+path = "test_feedback_propagation.rs"
+
+[[test]]
+name = "test_nars_inference"
+path = "test_nars_inference.rs"
+
+[dependencies]
+# Internal crates
+codegraph-extraction = { path = "../../crates/codegraph-extraction" }
+codegraph-graph = { path = "../../crates/codegraph-graph" }
+codegraph-vector = { path = "../../crates/codegraph-vector" }
+codegraph-retrieval = { path = "../../crates/codegraph-retrieval" }
+codegraph-generation = { path = "../../crates/codegraph-generation" }
+codegraph-feedback = { path = "../../crates/codegraph-feedback" }
+codegraph-reasoning = { path = "../../crates/codegraph-reasoning" }
+codegraph-web = { path = "../../crates/codegraph-web" }
+
+# Async runtime
+tokio = { version = "1.43", features = ["full", "test-util"] }
+
+# Utilities
+uuid = { version = "1.11", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

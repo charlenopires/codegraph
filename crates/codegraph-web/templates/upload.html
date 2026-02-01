@@ -1,0 +1,181 @@
+<!-- Upload Page Content -->
+<div class="max-w-5xl mx-auto">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Upload Code Snippet</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Add UI components to the knowledge graph for future retrieval and generation.</p>
+    </div>
+
+    <form id="uploadForm" hx-post="/api/snippets" hx-target="#uploadResult" hx-indicator="#uploadLoading" class="space-y-6">
+        <!-- Snippet Name -->
+        <div>
+            <label for="snippetName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Snippet Name</label>
+            <input type="text" id="snippetName" name="name"
+                   class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 px-4 py-2"
+                   placeholder="e.g., Primary Button, Hero Section">
+        </div>
+
+        <!-- Design System Select -->
+        <div>
+            <label for="designSystem" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Design System</label>
+            <select id="designSystem" name="design_system"
+                    class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 px-4 py-2">
+                <option value="">Auto-detect</option>
+                <option value="tailwind">Tailwind CSS</option>
+                <option value="bootstrap">Bootstrap</option>
+                <option value="material-ui">Material UI</option>
+                <option value="chakra">Chakra UI</option>
+                <option value="ant-design">Ant Design</option>
+                <option value="shadcn">shadcn/ui</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+
+        <!-- Code Editors Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- HTML -->
+            <div class="space-y-2">
+                <label for="htmlCode" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span class="w-3 h-3 rounded bg-orange-500 mr-2"></span>
+                    HTML
+                    <span class="ml-1 text-red-500">*</span>
+                </label>
+                <textarea id="htmlCode" name="html" rows="12" required
+                          class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 font-mono text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500 p-3"
+                          placeholder="<button class='btn btn-primary'>Click me</button>"
+                          oninput="updatePreview()"></textarea>
+            </div>
+
+            <!-- CSS -->
+            <div class="space-y-2">
+                <label for="cssCode" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span class="w-3 h-3 rounded bg-blue-500 mr-2"></span>
+                    CSS
+                </label>
+                <textarea id="cssCode" name="css" rows="12"
+                          class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 font-mono text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500 p-3"
+                          placeholder=".btn { padding: 0.5rem 1rem; }"
+                          oninput="updatePreview()"></textarea>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="space-y-2">
+                <label for="jsCode" class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span class="w-3 h-3 rounded bg-yellow-500 mr-2"></span>
+                    JavaScript
+                </label>
+                <textarea id="jsCode" name="js" rows="12"
+                          class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 font-mono text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500 p-3"
+                          placeholder="document.querySelector('.btn').addEventListener('click', () => { ... });"
+                          oninput="updatePreview()"></textarea>
+            </div>
+        </div>
+
+        <!-- Tags -->
+        <div>
+            <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags (comma-separated)</label>
+            <input type="text" id="tags" name="tags"
+                   class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 px-4 py-2"
+                   placeholder="button, primary, interactive">
+        </div>
+
+        <!-- Preview Section -->
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600 flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Preview</span>
+                <div class="flex items-center space-x-2">
+                    <button type="button" onclick="setPreviewSize('mobile')" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                    <button type="button" onclick="setPreviewSize('tablet')" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                    <button type="button" onclick="setPreviewSize('desktop')" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-900 p-4 flex justify-center min-h-[200px]">
+                <iframe id="previewFrame"
+                        class="border border-gray-200 dark:border-gray-700 rounded bg-white transition-all duration-300"
+                        style="width: 100%; height: 200px;"
+                        sandbox="allow-scripts"></iframe>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex items-center justify-end space-x-4">
+            <span id="uploadLoading" class="htmx-indicator">
+                <svg class="animate-spin h-5 w-5 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </span>
+            <button type="button" onclick="clearForm()"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                Clear
+            </button>
+            <button type="submit"
+                    class="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors">
+                Upload Snippet
+            </button>
+        </div>
+    </form>
+
+    <!-- Upload Result -->
+    <div id="uploadResult" class="mt-6"></div>
+</div>
+
+<script>
+    function updatePreview() {
+        const html = document.getElementById('htmlCode').value;
+        const css = document.getElementById('cssCode').value;
+        const js = document.getElementById('jsCode').value;
+
+        const previewDoc = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <script src="https://cdn.tailwindcss.com"><\/script>
+                <style>${css}</style>
+            </head>
+            <body class="p-4">
+                ${html}
+                <script>${js}<\/script>
+            </body>
+            </html>
+        `;
+
+        const iframe = document.getElementById('previewFrame');
+        iframe.srcdoc = previewDoc;
+    }
+
+    function setPreviewSize(size) {
+        const iframe = document.getElementById('previewFrame');
+        switch(size) {
+            case 'mobile':
+                iframe.style.width = '375px';
+                break;
+            case 'tablet':
+                iframe.style.width = '768px';
+                break;
+            case 'desktop':
+                iframe.style.width = '100%';
+                break;
+        }
+    }
+
+    function clearForm() {
+        document.getElementById('uploadForm').reset();
+        document.getElementById('previewFrame').srcdoc = '';
+        document.getElementById('uploadResult').innerHTML = '';
+    }
+
+    // Initial preview
+    updatePreview();
+</script>

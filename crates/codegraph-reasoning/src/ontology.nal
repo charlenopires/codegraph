@@ -1,0 +1,170 @@
+// CodeGraph UI Ontology for NARS
+// Defines component types, relationships, and attributes
+
+// ============================================
+// Component Hierarchy
+// ============================================
+
+// Atomic components (leaf nodes)
+<button --> atomic_component>. {1.0|0.99}
+<input_text --> atomic_component>. {1.0|0.99}
+<input_password --> atomic_component>. {1.0|0.99}
+<input_email --> atomic_component>. {1.0|0.99}
+<input_number --> atomic_component>. {1.0|0.99}
+<checkbox --> atomic_component>. {1.0|0.99}
+<radio --> atomic_component>. {1.0|0.99}
+<label --> atomic_component>. {1.0|0.99}
+<icon --> atomic_component>. {1.0|0.99}
+<image --> atomic_component>. {1.0|0.99}
+<link --> atomic_component>. {1.0|0.99}
+<text --> atomic_component>. {1.0|0.99}
+<divider --> atomic_component>. {1.0|0.99}
+<badge --> atomic_component>. {1.0|0.99}
+<avatar --> atomic_component>. {1.0|0.99}
+<spinner --> atomic_component>. {1.0|0.99}
+<progress_bar --> atomic_component>. {1.0|0.99}
+
+// Composite components (contain other components)
+<form --> composite_component>. {1.0|0.99}
+<card --> composite_component>. {1.0|0.99}
+<modal --> composite_component>. {1.0|0.99}
+<navbar --> composite_component>. {1.0|0.99}
+<sidebar --> composite_component>. {1.0|0.99}
+<dropdown --> composite_component>. {1.0|0.99}
+<table --> composite_component>. {1.0|0.99}
+<list --> composite_component>. {1.0|0.99}
+<tabs --> composite_component>. {1.0|0.99}
+<accordion --> composite_component>. {1.0|0.99}
+<carousel --> composite_component>. {1.0|0.99}
+<menu --> composite_component>. {1.0|0.99}
+<toolbar --> composite_component>. {1.0|0.99}
+<alert --> composite_component>. {1.0|0.99}
+<toast --> composite_component>. {1.0|0.99}
+<tooltip --> composite_component>. {1.0|0.99}
+<popover --> composite_component>. {1.0|0.99}
+
+// Component categories
+<atomic_component --> component>. {1.0|0.99}
+<composite_component --> component>. {1.0|0.99}
+
+// ============================================
+// Common Form Patterns (Implications)
+// ============================================
+
+// Login form composition
+<form_login ==> (&& input_text input_password button_primary)>. {1.0|0.95}
+
+// Registration form composition
+<form_registration ==> (&& input_text input_email input_password input_password_confirm button_primary)>. {1.0|0.95}
+
+// Contact form composition
+<form_contact ==> (&& input_text input_email textarea button_primary)>. {1.0|0.95}
+
+// Search form composition
+<form_search ==> (&& input_text button_search)>. {1.0|0.95}
+
+// ============================================
+// Button Variants
+// ============================================
+
+<button_primary --> button>. {1.0|0.99}
+<button_secondary --> button>. {1.0|0.99}
+<button_outline --> button>. {1.0|0.99}
+<button_ghost --> button>. {1.0|0.99}
+<button_link --> button>. {1.0|0.99}
+<button_icon --> button>. {1.0|0.99}
+<button_search --> button>. {1.0|0.99}
+<button_submit --> button>. {1.0|0.99}
+
+// ============================================
+// Interactive Components
+// ============================================
+
+<button --> [interactive]>. {1.0|0.95}
+<input_text --> [interactive]>. {1.0|0.95}
+<input_password --> [interactive]>. {1.0|0.95}
+<checkbox --> [interactive]>. {1.0|0.95}
+<radio --> [interactive]>. {1.0|0.95}
+<dropdown --> [interactive]>. {1.0|0.95}
+<modal --> [interactive]>. {1.0|0.95}
+<tabs --> [interactive]>. {1.0|0.95}
+<accordion --> [interactive]>. {1.0|0.95}
+<carousel --> [interactive]>. {1.0|0.95}
+<link --> [interactive]>. {1.0|0.95}
+
+// ============================================
+// Layout Components
+// ============================================
+
+<navbar --> [layout]>. {1.0|0.95}
+<sidebar --> [layout]>. {1.0|0.95}
+<header --> [layout]>. {1.0|0.95}
+<footer --> [layout]>. {1.0|0.95}
+<toolbar --> [layout]>. {1.0|0.95}
+
+// ============================================
+// Common Attributes
+// ============================================
+
+<[responsive] --> attribute>. {1.0|0.99}
+<[accessible] --> attribute>. {1.0|0.99}
+<[animated] --> attribute>. {1.0|0.99}
+<[dark] --> attribute>. {1.0|0.99}
+<[light] --> attribute>. {1.0|0.99}
+<[primary] --> attribute>. {1.0|0.99}
+<[secondary] --> attribute>. {1.0|0.99}
+<[disabled] --> attribute>. {1.0|0.99}
+<[loading] --> attribute>. {1.0|0.99}
+<[required] --> attribute>. {1.0|0.99}
+<[readonly] --> attribute>. {1.0|0.99}
+<[error] --> attribute>. {1.0|0.99}
+<[success] --> attribute>. {1.0|0.99}
+<[warning] --> attribute>. {1.0|0.99}
+
+// ============================================
+// Size Variants
+// ============================================
+
+<[small] --> size>. {1.0|0.99}
+<[medium] --> size>. {1.0|0.99}
+<[large] --> size>. {1.0|0.99}
+<size --> attribute>. {1.0|0.99}
+
+// ============================================
+// Common Component-Attribute Combinations
+// ============================================
+
+<(button * [primary]) --> common_combination>. {1.0|0.85}
+<(button * [secondary]) --> common_combination>. {1.0|0.85}
+<(button * [loading]) --> common_combination>. {1.0|0.80}
+<(form * [responsive]) --> common_combination>. {1.0|0.90}
+<(modal * [animated]) --> common_combination>. {1.0|0.90}
+<(navbar * [responsive]) --> common_combination>. {1.0|0.95}
+<(card * [animated]) --> common_combination>. {1.0|0.75}
+<(input_text * [required]) --> common_combination>. {1.0|0.85}
+
+// ============================================
+// Intent Definitions
+// ============================================
+
+<[create] --> intent>. {1.0|0.99}
+<[find] --> intent>. {1.0|0.99}
+<[modify] --> intent>. {1.0|0.99}
+<[delete] --> intent>. {1.0|0.99}
+<[list] --> intent>. {1.0|0.99}
+
+// ============================================
+// Inference Rules
+// ============================================
+
+// If a component-attribute combination is common, suggest it
+<(($comp * $attr) --> common_combination) ==> (($comp * $attr) --> suggested)>. {1.0|0.8}
+
+// Interactive components should be accessible
+<($comp --> [interactive]) ==> ($comp --> [accessible])>. {0.9|0.7}
+
+// Layout components should be responsive
+<($comp --> [layout]) ==> ($comp --> [responsive])>. {0.95|0.8}
+
+// Forms should have validation
+<($form --> form) ==> ($form --> [validated])>. {0.8|0.7}

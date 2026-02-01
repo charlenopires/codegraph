@@ -1,0 +1,242 @@
+<!-- Metrics Page Content -->
+<div class="max-w-7xl mx-auto">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Metrics Dashboard</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Real-time system metrics and feedback analytics.</p>
+    </div>
+
+    <!-- Stats Overview Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <!-- Total Elements -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Elements</p>
+                    <p id="metricTotalElements" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
+                </div>
+                <div class="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
+                    <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-sm text-green-600 dark:text-green-400 mt-2">
+                <span class="font-medium">+12</span> this week
+            </p>
+        </div>
+
+        <!-- Relations -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Relations</p>
+                    <p id="metricTotalRelations" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
+                </div>
+                <div class="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-sm text-blue-600 dark:text-blue-400 mt-2">
+                <span class="font-medium">SIMILAR_TO, CAN_REPLACE</span>
+            </p>
+        </div>
+
+        <!-- Average Confidence -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Avg Confidence</p>
+                    <p id="metricAvgConfidence" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--%</p>
+                </div>
+                <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                NARS truth-value
+            </p>
+        </div>
+
+        <!-- Feedback Ratio -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Feedback Ratio</p>
+                    <p id="metricFeedbackRatio" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--%</p>
+                </div>
+                <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-sm text-purple-600 dark:text-purple-400 mt-2">
+                Positive / Total
+            </p>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Confidence Trend Chart -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Confidence Trend</h3>
+            <div id="confidenceChart" class="h-64 flex items-center justify-center text-gray-400">
+                <div class="text-center">
+                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                    </svg>
+                    <p>Loading chart data...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Distribution -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Category Distribution</h3>
+            <div id="categoryChart" class="h-64 flex items-center justify-center text-gray-400">
+                <div class="text-center">
+                    <svg class="w-12 h-12 mx-auto mb-2 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+                    </svg>
+                    <p>Loading chart data...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback History -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Feedback</h3>
+            <button class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+                View All
+            </button>
+        </div>
+        <div id="feedbackList" class="space-y-3">
+            <!-- Feedback items will be loaded here -->
+            <div class="text-center py-8 text-gray-400">
+                <svg class="w-12 h-12 mx-auto mb-2 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <p>No feedback recorded yet</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Design System Stats -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Design Systems</h3>
+        <div id="designSystemStats" class="space-y-4">
+            <!-- Design system bars -->
+            <div class="flex items-center">
+                <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Tailwind</span>
+                <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-cyan-500 rounded-full" style="width: 45%"></div>
+                </div>
+                <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">45%</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Bootstrap</span>
+                <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-purple-500 rounded-full" style="width: 25%"></div>
+                </div>
+                <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">25%</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Material UI</span>
+                <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-blue-500 rounded-full" style="width: 15%"></div>
+                </div>
+                <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">15%</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-24 text-sm text-gray-600 dark:text-gray-400">shadcn/ui</span>
+                <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-gray-500 rounded-full" style="width: 10%"></div>
+                </div>
+                <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">10%</span>
+            </div>
+            <div class="flex items-center">
+                <span class="w-24 text-sm text-gray-600 dark:text-gray-400">Other</span>
+                <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-orange-500 rounded-full" style="width: 5%"></div>
+                </div>
+                <span class="w-12 text-right text-sm text-gray-600 dark:text-gray-400">5%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fetch and update metrics
+    async function loadMetrics() {
+        try {
+            const response = await fetch('/api/metrics');
+            const data = await response.json();
+
+            document.getElementById('metricTotalElements').textContent = data.total_elements || 0;
+            document.getElementById('metricTotalRelations').textContent = data.total_relations || 0;
+            document.getElementById('metricAvgConfidence').textContent =
+                data.avg_confidence ? Math.round(data.avg_confidence * 100) + '%' : '0%';
+            document.getElementById('metricFeedbackRatio').textContent =
+                data.feedback_ratio ? Math.round(data.feedback_ratio * 100) + '%' : '0%';
+        } catch (error) {
+            console.error('Failed to load metrics:', error);
+        }
+    }
+
+    // Load graph stats for charts
+    async function loadGraphStats() {
+        try {
+            const response = await fetch('/api/graph/stats');
+            const data = await response.json();
+
+            // Update category distribution chart with real data
+            if (data.categories) {
+                renderCategoryChart(data.categories);
+            }
+        } catch (error) {
+            console.error('Failed to load graph stats:', error);
+        }
+    }
+
+    // Simple bar chart for categories
+    function renderCategoryChart(categories) {
+        const container = document.getElementById('categoryChart');
+        if (!categories || Object.keys(categories).length === 0) {
+            return;
+        }
+
+        const total = Object.values(categories).reduce((a, b) => a + b, 0);
+        const colors = ['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
+
+        let html = '<div class="space-y-2 w-full">';
+        Object.entries(categories).slice(0, 5).forEach(([name, count], i) => {
+            const pct = Math.round((count / total) * 100);
+            html += `
+                <div class="flex items-center">
+                    <span class="w-20 text-xs text-gray-600 dark:text-gray-400 truncate">${name}</span>
+                    <div class="flex-1 h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mx-2">
+                        <div class="h-full rounded-full" style="width: ${pct}%; background-color: ${colors[i]}"></div>
+                    </div>
+                    <span class="w-8 text-right text-xs text-gray-600 dark:text-gray-400">${count}</span>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    // Initialize
+    loadMetrics();
+    loadGraphStats();
+
+    // Refresh every 30 seconds
+    setInterval(loadMetrics, 30000);
+</script>

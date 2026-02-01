@@ -1,0 +1,24 @@
+[package]
+name = "codegraph-cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "codegraph"
+path = "src/main.rs"
+
+[dependencies]
+codegraph-core = { path = "../codegraph-core" }
+codegraph-web = { path = "../codegraph-web" }
+codegraph-mcp = { path = "../codegraph-mcp" }
+codegraph-graph = { path = "../codegraph-graph" }
+codegraph-vector = { path = "../codegraph-vector" }
+codegraph-extraction = { path = "../codegraph-extraction" }
+codegraph-retrieval = { path = "../codegraph-retrieval" }
+codegraph-generation = { path = "../codegraph-generation" }
+codegraph-benchmark = { path = "../codegraph-benchmark" }
+tokio.workspace = true
+clap = { version = "4.5", features = ["derive"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true

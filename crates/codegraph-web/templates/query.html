@@ -1,0 +1,392 @@
+<!-- Query Page Content -->
+<div class="max-w-5xl mx-auto">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Query & Generate</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Search for UI components or generate new ones using natural language.</p>
+    </div>
+
+    <!-- Query Input -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <form id="queryForm" class="space-y-4">
+            <div>
+                <label for="queryInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Describe what you're looking for
+                </label>
+                <textarea id="queryInput" name="query" rows="3"
+                          class="block w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 shadow-sm focus:border-primary-500 focus:ring-primary-500 p-4 text-lg"
+                          placeholder="e.g., A responsive hero section with gradient background and call-to-action button"></textarea>
+            </div>
+
+            <!-- Options -->
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="includeReasoning" name="include_reasoning" checked
+                           class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+                    <label for="includeReasoning" class="ml-2 text-sm text-gray-700 dark:text-gray-300">Show reasoning</label>
+                </div>
+
+                <select id="designSystemFilter" name="design_system"
+                        class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm px-3 py-1.5">
+                    <option value="">All design systems</option>
+                    <option value="tailwind">Tailwind</option>
+                    <option value="bootstrap">Bootstrap</option>
+                    <option value="material-ui">Material UI</option>
+                    <option value="chakra">Chakra UI</option>
+                </select>
+
+                <div class="flex items-center">
+                    <label for="resultLimit" class="text-sm text-gray-700 dark:text-gray-300 mr-2">Results:</label>
+                    <select id="resultLimit" name="limit"
+                            class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-sm px-3 py-1.5">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between pt-2">
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                    <span id="queryTimer" class="hidden">Processing time: <span class="font-mono">0</span>ms</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span id="queryLoading" class="htmx-indicator">
+                        <svg class="animate-spin h-5 w-5 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                    </span>
+                    <button type="button" onclick="executeQuery()"
+                            class="px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        Search
+                    </button>
+                    <button type="button" onclick="generateCode()"
+                            class="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        Generate
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Container -->
+    <div id="queryResults" class="space-y-4">
+        <!-- Results will be loaded here -->
+    </div>
+
+    <!-- Generated Code Container -->
+    <div id="generatedCode" class="hidden mt-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Generated Code</h3>
+                <div class="flex items-center space-x-2">
+                    <!-- Feedback buttons -->
+                    <button onclick="submitFeedback(true)" class="p-2 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 text-gray-500 hover:text-green-600 transition-colors" title="Good result">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                        </svg>
+                    </button>
+                    <button onclick="submitFeedback(false)" class="p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-500 hover:text-red-600 transition-colors" title="Needs improvement">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"/>
+                        </svg>
+                    </button>
+                    <button onclick="copyCode()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors" title="Copy code">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Code Tabs -->
+            <div class="border-b border-gray-200 dark:border-gray-700">
+                <nav class="flex -mb-px">
+                    <button onclick="showCodeTab('html')" class="code-tab active" data-tab="html">HTML</button>
+                    <button onclick="showCodeTab('css')" class="code-tab" data-tab="css">CSS</button>
+                    <button onclick="showCodeTab('js')" class="code-tab" data-tab="js">JavaScript</button>
+                    <button onclick="showCodeTab('preview')" class="code-tab" data-tab="preview">Preview</button>
+                </nav>
+            </div>
+
+            <!-- Code Panels -->
+            <div id="codeHtml" class="code-panel">
+                <pre><code class="language-html" id="htmlOutput"></code></pre>
+            </div>
+            <div id="codeCss" class="code-panel hidden">
+                <pre><code class="language-css" id="cssOutput"></code></pre>
+            </div>
+            <div id="codeJs" class="code-panel hidden">
+                <pre><code class="language-javascript" id="jsOutput"></code></pre>
+            </div>
+            <div id="codePreview" class="code-panel hidden p-4">
+                <iframe id="codePreviewFrame" class="w-full h-64 border border-gray-200 dark:border-gray-700 rounded-lg bg-white" sandbox="allow-scripts"></iframe>
+            </div>
+
+            <!-- Reasoning Section -->
+            <div id="reasoningSection" class="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900/50">
+                <details>
+                    <summary class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">NARS Reasoning</summary>
+                    <div id="reasoningContent" class="mt-2 text-sm text-gray-600 dark:text-gray-400 font-mono whitespace-pre-wrap"></div>
+                </details>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .code-tab {
+        @apply px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 transition-colors;
+    }
+    .code-tab.active {
+        @apply text-primary-600 dark:text-primary-400 border-primary-600 dark:border-primary-400;
+    }
+    .code-panel {
+        @apply max-h-96 overflow-auto;
+    }
+    .code-panel pre {
+        @apply m-0 p-4 bg-gray-900 text-gray-100;
+    }
+</style>
+
+<script>
+    let currentGenerationId = null;
+
+    async function executeQuery() {
+        const query = document.getElementById('queryInput').value;
+        if (!query.trim()) return;
+
+        const loading = document.getElementById('queryLoading');
+        loading.classList.remove('htmx-indicator');
+        loading.style.display = 'inline-block';
+
+        const startTime = Date.now();
+
+        try {
+            const response = await fetch('/api/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: query,
+                    limit: parseInt(document.getElementById('resultLimit').value),
+                    design_system: document.getElementById('designSystemFilter').value || null,
+                    include_reasoning: document.getElementById('includeReasoning').checked
+                })
+            });
+
+            const data = await response.json();
+            displayQueryResults(data);
+
+            // Show timer
+            const elapsed = Date.now() - startTime;
+            const timer = document.getElementById('queryTimer');
+            timer.querySelector('span').textContent = elapsed;
+            timer.classList.remove('hidden');
+
+        } catch (error) {
+            console.error('Query error:', error);
+            document.getElementById('queryResults').innerHTML = `
+                <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                    <p class="text-red-700 dark:text-red-400">Error executing query. Please try again.</p>
+                </div>
+            `;
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+    function displayQueryResults(data) {
+        const container = document.getElementById('queryResults');
+
+        if (!data.elements || data.elements.length === 0) {
+            container.innerHTML = `
+                <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p class="mt-2 text-gray-500 dark:text-gray-400">No matching components found. Try generating one instead!</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '<div class="grid gap-4">';
+        for (const result of data.elements) {
+            const confidenceColor = result.score > 0.7 ? 'green' : result.score > 0.4 ? 'yellow' : 'red';
+            html += `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 dark:text-white">${result.element.name}</h4>
+                            <div class="flex items-center mt-1 space-x-2">
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">${result.element.category}</span>
+                                ${result.element.design_system ? `<span class="px-2 py-0.5 text-xs rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">${result.element.design_system}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm font-medium text-${confidenceColor}-600 dark:text-${confidenceColor}-400">${(result.score * 100).toFixed(0)}%</span>
+                            <div class="w-16 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-${confidenceColor}-500 rounded-full" style="width: ${result.score * 100}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">${result.match_reason}</p>
+                    ${result.element.css_classes.length > 0 ? `
+                        <div class="mt-2 flex flex-wrap gap-1">
+                            ${result.element.css_classes.slice(0, 5).map(c => `<code class="px-1.5 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">${c}</code>`).join('')}
+                            ${result.element.css_classes.length > 5 ? `<span class="text-xs text-gray-500">+${result.element.css_classes.length - 5} more</span>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        html += '</div>';
+
+        // Show reasoning if available
+        if (data.reasoning_explanation) {
+            html += `
+                <div class="mt-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                    <details>
+                        <summary class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">NARS Reasoning (${data.narsese_queries?.length || 0} queries)</summary>
+                        <pre class="mt-2 text-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap">${data.reasoning_explanation}</pre>
+                    </details>
+                </div>
+            `;
+        }
+
+        container.innerHTML = html;
+    }
+
+    async function generateCode() {
+        const query = document.getElementById('queryInput').value;
+        if (!query.trim()) return;
+
+        const loading = document.getElementById('queryLoading');
+        loading.classList.remove('htmx-indicator');
+        loading.style.display = 'inline-block';
+
+        try {
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: query,
+                    design_system: document.getElementById('designSystemFilter').value || null,
+                    include_css: true,
+                    include_js: true,
+                    use_references: true
+                })
+            });
+
+            const data = await response.json();
+            displayGeneratedCode(data);
+
+        } catch (error) {
+            console.error('Generate error:', error);
+        } finally {
+            loading.style.display = 'none';
+        }
+    }
+
+    function displayGeneratedCode(data) {
+        const container = document.getElementById('generatedCode');
+        container.classList.remove('hidden');
+
+        // Store for feedback
+        currentGenerationId = data.reference_elements?.[0] || null;
+
+        // Update code outputs
+        document.getElementById('htmlOutput').textContent = data.html || '<!-- No HTML generated -->';
+        document.getElementById('cssOutput').textContent = data.css || '/* No CSS generated */';
+        document.getElementById('jsOutput').textContent = data.javascript || '// No JavaScript generated';
+
+        // Update preview
+        const previewDoc = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <script src="https://cdn.tailwindcss.com"><\/script>
+                <style>${data.css || ''}</style>
+            </head>
+            <body class="p-4 bg-gray-50">
+                ${data.html || ''}
+                <script>${data.javascript || ''}<\/script>
+            </body>
+            </html>
+        `;
+        document.getElementById('codePreviewFrame').srcdoc = previewDoc;
+
+        // Update reasoning
+        if (data.narsese_reasoning?.length > 0) {
+            document.getElementById('reasoningContent').textContent = data.narsese_reasoning.join('\n');
+            document.getElementById('reasoningSection').classList.remove('hidden');
+        } else {
+            document.getElementById('reasoningSection').classList.add('hidden');
+        }
+
+        // Highlight code
+        document.querySelectorAll('#generatedCode pre code').forEach(block => {
+            hljs.highlightElement(block);
+        });
+
+        // Show HTML tab by default
+        showCodeTab('html');
+    }
+
+    function showCodeTab(tab) {
+        document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.code-tab[data-tab="${tab}"]`).classList.add('active');
+
+        document.querySelectorAll('.code-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`code${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
+    }
+
+    function copyCode() {
+        const html = document.getElementById('htmlOutput').textContent;
+        const css = document.getElementById('cssOutput').textContent;
+        const js = document.getElementById('jsOutput').textContent;
+
+        const fullCode = `<!-- HTML -->\n${html}\n\n/* CSS */\n${css}\n\n// JavaScript\n${js}`;
+        navigator.clipboard.writeText(fullCode);
+
+        // Show feedback
+        alert('Code copied to clipboard!');
+    }
+
+    async function submitFeedback(positive) {
+        if (!currentGenerationId) return;
+
+        try {
+            await fetch('/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    element_id: currentGenerationId,
+                    feedback_type: positive ? 'thumbs_up' : 'thumbs_down',
+                    query_context: document.getElementById('queryInput').value
+                })
+            });
+
+            alert(positive ? 'Thanks for the positive feedback!' : 'Thanks for the feedback. We\'ll improve!');
+        } catch (error) {
+            console.error('Feedback error:', error);
+        }
+    }
+
+    // Enter key to search
+    document.getElementById('queryInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            generateCode();
+        } else if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            executeQuery();
+        }
+    });
+</script>

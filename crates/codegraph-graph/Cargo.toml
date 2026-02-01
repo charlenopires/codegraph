@@ -1,0 +1,29 @@
+[package]
+name = "codegraph-graph"
+version.workspace = true
+edition = "2021"
+description = "Neo4j graph operations"
+
+[dependencies]
+# Async runtime
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# Neo4j client
+neo4rs = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Utils
+uuid = { workspace = true }
+chrono = { workspace = true }

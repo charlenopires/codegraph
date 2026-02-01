@@ -1,0 +1,89 @@
+# Build artifacts
+/target/
+debug/
+release/
+
+# Cargo
+Cargo.lock
+*.rlib
+*.rmeta
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+*.log
+logs/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# CWA local state (keep templates)
+.cwa/cwa.db
+.cwa/cwa.db-*
+
+# Test artifacts
+*.profraw
+*.profdata
+lcov.info
+coverage/
+tarpaulin-report.html
+
+# Docker
+.docker/
+
+# Node (for frontend assets if any)
+node_modules/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Generated documentation
+/docs/generated/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+
+# Credentials and secrets
+*.pem
+*.key
+*.crt
+*.p12
+credentials.json
+secrets/
+
+# Benchmark results (keep templates)
+benchmark-results/
+
+# Neo4j data
+neo4j/data/
+neo4j/logs/
+
+# Qdrant data
+qdrant_storage/
+
+# Redis data
+dump.rdb
+appendonly.aof
+
+# Scratchpad
+scratchpad/

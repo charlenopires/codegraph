@@ -1,0 +1,29 @@
+[package]
+name = "codegraph-benchmark"
+version.workspace = true
+edition = "2021"
+description = "Benchmark suite comparing GraphRAG+NARS vs SimpleVectorRAG"
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.42", features = ["full"] }
+async-trait = "0.1"
+
+# Vector storage
+codegraph-vector = { path = "../codegraph-vector" }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Utilities
+uuid = { version = "1.11", features = ["v4", "serde"] }
+thiserror = "2.0"
+tracing = "0.1"
+anyhow = "1.0"
+
+# Statistics
+statrs = "0.18"
+
+# Time measurement
+std-time = { package = "time", version = "0.3" }
