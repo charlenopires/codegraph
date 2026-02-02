@@ -157,15 +157,37 @@ Future queries rank this component higher (no retraining!)
 
 ## Tech Stack
 
-| Component | Technology | Purpose |
-|-----------|------------|---------|
-| **Backend** | Rust 1.83+ / Axum 0.8 | High-performance async web framework |
-| **Graph Database** | Neo4j 5.x | Stores component relationships and ontology |
-| **Vector Database** | Qdrant 1.12+ | Semantic similarity search |
-| **Cache** | Redis 7.x | Rate limiting, response caching |
-| **Frontend** | HTMX 2.0 / TailwindCSS 4.0 | Hypermedia-driven dashboard |
-| **Reasoning** | OpenNARS for Applications | Symbolic reasoning with truth-values |
-| **LLM** | GPT-4o | Natural language understanding and code generation |
+### Backend
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Language** | Rust | Edition 2024 | Systems programming with memory safety |
+| **Runtime** | Tokio | 1.43 | Async runtime for high-performance I/O |
+| **Web Framework** | Axum | 0.8 | Async web framework with WebSocket support |
+| **Graph Database** | Neo4j | 5.x | Component relationships and ontology |
+| **Vector Database** | Qdrant | 1.13+ | Semantic similarity search |
+| **Cache** | Redis | 7.x | Rate limiting, response caching |
+| **AST Parsing** | tree-sitter | 0.24 | HTML/CSS/JS parsing |
+| **LLM Integration** | async-openai | 0.28 | GPT-4o for code generation |
+| **Observability** | Prometheus | 0.13 | Metrics collection |
+| **API Docs** | utoipa | 5.4 | OpenAPI/Swagger documentation |
+| **Reasoning** | OpenNARS for Applications | - | Symbolic reasoning with truth-values |
+
+### Frontend
+
+| Component | Technology | Version | Purpose |
+|-----------|------------|---------|---------|
+| **Framework** | React | 19.2 | UI components |
+| **Language** | TypeScript | 5.9 | Type-safe JavaScript |
+| **Build Tool** | Vite | 7.2 | Fast development and bundling |
+| **Package Manager** | Bun | - | Fast JavaScript runtime and package manager |
+| **Styling** | TailwindCSS | 4.1 | Utility-first CSS |
+| **Routing** | React Router DOM | 7.13 | Client-side routing |
+| **State Management** | Zustand | 5.0 | Lightweight state management |
+| **Code Editor** | CodeMirror | 6 | Syntax-highlighted code editing |
+| **Charts** | Recharts | 3.7 | Data visualization |
+| **Graph Visualization** | D3.js | 7.9 | Knowledge graph rendering |
+| **Icons** | Lucide React | 0.563 | Icon library |
 
 ## Getting Started
 
